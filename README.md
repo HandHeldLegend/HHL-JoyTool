@@ -1,16 +1,11 @@
-# snapbackapp
+# HHL JoyTool
 
-A new Flutter project.
+A Flutter app to test GameCube controllers. Limited support for Pro Controllers and JoyCons via Bluetooth at this time.
 
-## Getting Started
+## Functions
 
-This project is a starting point for a Flutter application.
+Device Select - Choose which controller port you want to read from.
 
-A few resources to get you started if this is your first Flutter project:
+Joypad Test - Test buttons and see raw stick data.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Stick Analyzer - Analyze the waveforms produced by your joysticks. Press 'A' to freeze/unfreeze the data.
