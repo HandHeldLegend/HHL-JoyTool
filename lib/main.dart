@@ -136,6 +136,12 @@ class JoyToolMasterState {
               .firstWhere(
                   (element) => element.direction == UsbEndpoint.DIRECTION_OUT);
 
+          // Send SET_PROTOCOL HID specific command.
+          int tmpRes = await QuickUsb.controlTransfer(
+              _usbDevice, 0x21, 0x0B, 0x0001, 0x0, Uint8List.fromList([]), 0x0);
+
+          debugPrint("Control transfer result code: $tmpRes");
+
           // Send activate command to GCC adapter.
           _usbBulkTransferOut = await QuickUsb.bulkTransferOut(
               _usbEndpointOut, Uint8List.fromList([0x13]),
@@ -312,37 +318,43 @@ class JoyToolMasterState {
     if (devType == 0) {
       try {
         _usbBulkTransferIn =
-            await QuickUsb.bulkTransferIn(_usbEndpointIn, 37, timeout: 0);
+            await QuickUsb.bulkTransferIn(_usbEndpointIn, 37, timeout: 32);
       } catch (e) {
-        debugPrint("USB Failure");
-        stopJoypadDevice();
+        debugPrint(_usbBulkTransferIn.toString());
+        debugPrint("USB Failure - Timeout");
+        //stopJoypadDevice();
       }
 
-      if (_usbBulkTransferIn![0] == 33) {
-        int offset = 9 * subDev;
-        inputData.aButton.value = _usbBulkTransferIn![2 + offset] & 1;
-        inputData.bButton.value = (_usbBulkTransferIn![2 + offset] >> 1) & 1;
-        inputData.xButton.value = (_usbBulkTransferIn![2 + offset] >> 2) & 1;
-        inputData.yButton.value = (_usbBulkTransferIn![2 + offset] >> 3) & 1;
-        inputData.startButton.value =
-            (_usbBulkTransferIn![2 + offset] >> 4) & 1;
+      try {
+        if (_usbBulkTransferIn![0] == 33) {
+          int offset = 9 * subDev;
+          inputData.aButton.value = _usbBulkTransferIn![2 + offset] & 1;
+          inputData.bButton.value = (_usbBulkTransferIn![2 + offset] >> 1) & 1;
+          inputData.xButton.value = (_usbBulkTransferIn![2 + offset] >> 2) & 1;
+          inputData.yButton.value = (_usbBulkTransferIn![2 + offset] >> 3) & 1;
 
-        inputData.dpadLeft.value = _usbBulkTransferIn![3 + offset] & 1;
-        inputData.dpadRight.value = _usbBulkTransferIn![3 + offset] & (1 << 1);
-        inputData.dpadDown.value = _usbBulkTransferIn![3 + offset] & (1 << 2);
-        inputData.dpadUp.value = _usbBulkTransferIn![3 + offset] & (1 << 3);
-        inputData.zrButton.value = _usbBulkTransferIn![3 + offset] & (1 << 4);
-        inputData.rButton.value = _usbBulkTransferIn![3 + offset] & (1 << 5);
-        inputData.lButton.value = _usbBulkTransferIn![3 + offset] & (1 << 6);
+          inputData.dpadLeft.value = (_usbBulkTransferIn![2 + offset] >> 4) & 1;
+          inputData.dpadRight.value = (_usbBulkTransferIn![2 + offset] >> 5) & 1;
+          inputData.dpadDown.value = (_usbBulkTransferIn![2 + offset] >> 6) & 1;
+          inputData.dpadUp.value = (_usbBulkTransferIn![2 + offset] >> 7) & 1;
 
-        inputData.lStickX.value = _usbBulkTransferIn![4 + offset];
-        inputData.lStickY.value = _usbBulkTransferIn![5 + offset];
-        inputData.rStickX.value = _usbBulkTransferIn![6 + offset];
-        inputData.rStickY.value = _usbBulkTransferIn![7 + offset];
-        inputData.lTrigger.value = _usbBulkTransferIn![8 + offset];
-        inputData.lTrigger.value = _usbBulkTransferIn![9 + offset];
+          inputData.startButton.value = _usbBulkTransferIn![3 + offset] & 1;
+          inputData.zrButton.value = (_usbBulkTransferIn![3 + offset] >> 1) & 1;
+          inputData.rButton.value = (_usbBulkTransferIn![3 + offset] >> 2) & 1;
+          inputData.lButton.value = (_usbBulkTransferIn![3 + offset] >> 3) & 1;
+
+          inputData.lStickX.value = _usbBulkTransferIn![4 + offset];
+          inputData.lStickY.value = _usbBulkTransferIn![5 + offset];
+          inputData.rStickX.value = _usbBulkTransferIn![6 + offset];
+          inputData.rStickY.value = _usbBulkTransferIn![7 + offset];
+          inputData.lTrigger.value = _usbBulkTransferIn![8 + offset];
+          inputData.rTrigger.value = _usbBulkTransferIn![9 + offset];
+        }
+      } catch (e) {
+        debugPrint("Failed USB Bulk transfer in.");
       }
     }
+
     // Pro Controller Bluetooth Type.
     else if (devType == 1) {
       try {

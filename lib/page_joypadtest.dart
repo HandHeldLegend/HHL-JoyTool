@@ -102,33 +102,94 @@ class _PageJoypadTestState extends State<PageJoypadTest> {
     joypadLoop();
 
     return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Text("Button Test"),
+        Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
           ButtonUpdateWidget(
-            name: "A",
+            name: "A ",
             notifier: JoyToolMasterState().inputData.aButton,
           ),
           ButtonUpdateWidget(
-            name: "B",
+            name: "B ",
             notifier: JoyToolMasterState().inputData.bButton,
           ),
           ButtonUpdateWidget(
-            name: "X",
+            name: "X ",
             notifier: JoyToolMasterState().inputData.xButton,
           ),
           ButtonUpdateWidget(
-            name: "Y",
+            name: "Y ",
             notifier: JoyToolMasterState().inputData.yButton,
           ),
+          ButtonUpdateWidget(
+            name: "D-Up ",
+            notifier: JoyToolMasterState().inputData.dpadUp,
+          ),
+          ButtonUpdateWidget(
+            name: "D-Down ",
+            notifier: JoyToolMasterState().inputData.dpadDown,
+          ),
           AnalogUpdateWidget(
-            name: "Stick X",
+            name: "L Stick X ",
             notifier: JoyToolMasterState().inputData.lStickX,
+          ),
+          AnalogUpdateWidget(
+            name: "L Stick Y ",
+            notifier: JoyToolMasterState().inputData.lStickY,
+          ),
+          AnalogUpdateWidget(
+            name: "L Trigger Analog ",
+            notifier: JoyToolMasterState().inputData.lTrigger,
           )
         ],
       ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          ButtonUpdateWidget(
+            name: "Z ",
+            notifier: JoyToolMasterState().inputData.zrButton,
+          ),
+          ButtonUpdateWidget(
+            name: "R Button ",
+            notifier: JoyToolMasterState().inputData.rButton,
+          ),
+          ButtonUpdateWidget(
+            name: "L Button ",
+            notifier: JoyToolMasterState().inputData.lButton,
+          ),
+          ButtonUpdateWidget(
+            name: "Start ",
+            notifier: JoyToolMasterState().inputData.startButton,
+          ),
+          ButtonUpdateWidget(
+            name: "D-Left ",
+            notifier: JoyToolMasterState().inputData.dpadLeft,
+          ),
+          ButtonUpdateWidget(
+            name: "D-Right ",
+            notifier: JoyToolMasterState().inputData.dpadRight,
+          ),
+          AnalogUpdateWidget(
+            name: "R Stick X ",
+            notifier: JoyToolMasterState().inputData.rStickX,
+          ),
+          AnalogUpdateWidget(
+            name: "R Stick Y ",
+            notifier: JoyToolMasterState().inputData.rStickY,
+          ),
+          AnalogUpdateWidget(
+            name: "R Trigger Analog ",
+            notifier: JoyToolMasterState().inputData.rTrigger,
+          )
+        ],
+      )
+      ],)
     );
   }
 }
